@@ -32,13 +32,19 @@ interface OrdersAndDocumentsProps {
 const OrdersAndDocuments = ({ orders, documents, getStatusColor }: OrdersAndDocumentsProps) => {
   const [orderSearch, setOrderSearch] = useState('');
   const [documentSearch, setDocumentSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('Все');
 
-  const filteredOrders = orders.filter(order => 
-    order.id.toLowerCase().includes(orderSearch.toLowerCase()) ||
-    order.type.toLowerCase().includes(orderSearch.toLowerCase()) ||
-    order.product.toLowerCase().includes(orderSearch.toLowerCase()) ||
-    order.status.toLowerCase().includes(orderSearch.toLowerCase())
-  );
+  const filteredOrders = orders.filter(order => {
+    const matchesSearch = 
+      order.id.toLowerCase().includes(orderSearch.toLowerCase()) ||
+      order.type.toLowerCase().includes(orderSearch.toLowerCase()) ||
+      order.product.toLowerCase().includes(orderSearch.toLowerCase()) ||
+      order.status.toLowerCase().includes(orderSearch.toLowerCase());
+    
+    const matchesStatus = statusFilter === 'Все' || order.status === statusFilter;
+    
+    return matchesSearch && matchesStatus;
+  });
 
   const filteredDocuments = documents.filter(doc =>
     doc.name.toLowerCase().includes(documentSearch.toLowerCase()) ||
@@ -94,14 +100,28 @@ const OrdersAndDocuments = ({ orders, documents, getStatusColor }: OrdersAndDocu
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="relative">
-              <Icon name="Search" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Поиск по заказам..."
-                value={orderSearch}
-                onChange={(e) => setOrderSearch(e.target.value)}
-                className="pl-10"
-              />
+            <div className="flex gap-3">
+              <div className="relative flex-1">
+                <Icon name="Search" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Поиск по заказам..."
+                  value={orderSearch}
+                  onChange={(e) => setOrderSearch(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <div className="flex gap-2">
+                {['Все', 'Выполнен', 'В обработке', 'Активен'].map((status) => (
+                  <Button
+                    key={status}
+                    variant={statusFilter === status ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setStatusFilter(status)}
+                  >
+                    {status}
+                  </Button>
+                ))}
+              </div>
             </div>
             {filteredOrders.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">

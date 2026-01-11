@@ -4,6 +4,7 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import ProfileCard from '@/components/dashboard/ProfileCard';
 import OrdersAndDocuments from '@/components/dashboard/OrdersAndDocuments';
 import EditProfileModal from '@/components/dashboard/EditProfileModal';
+import SupportChat from '@/components/dashboard/SupportChat';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 
@@ -18,6 +19,7 @@ const Dashboard = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editData, setEditData] = useState(user);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showChat, setShowChat] = useState(false);
 
   const notifications = [
     {
@@ -204,6 +206,18 @@ const Dashboard = () => {
         handleAvatarChange={handleAvatarChange}
         onSave={setUser}
       />
+
+      <SupportChat isOpen={showChat} onClose={() => setShowChat(false)} />
+
+      {!showChat && (
+        <Button
+          size="lg"
+          className="fixed bottom-4 right-4 rounded-full w-14 h-14 shadow-2xl bg-gradient-to-r from-primary to-accent hover:scale-110 transition-transform z-40"
+          onClick={() => setShowChat(true)}
+        >
+          <Icon name="MessageCircle" size={24} />
+        </Button>
+      )}
     </div>
   );
 };
