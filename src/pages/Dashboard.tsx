@@ -10,10 +10,22 @@ const Dashboard = () => {
     name: 'Иван Петров',
     company: 'ООО "Колос"',
     email: 'ivan@kolos.ru',
-    phone: '+7 (927) 123-45-67'
+    phone: '+7 (927) 123-45-67',
+    avatar: ''
   });
   const [showEditModal, setShowEditModal] = useState(false);
   const [editData, setEditData] = useState(user);
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditData({ ...editData, avatar: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const orders = [
     {
@@ -94,8 +106,12 @@ const Dashboard = () => {
         <div className="grid md:grid-cols-4 gap-6 mb-8">
           <Card className="md:col-span-1">
             <CardHeader>
-              <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="User" size={40} className="text-primary" />
+              <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                {user.avatar ? (
+                  <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                ) : (
+                  <Icon name="User" size={40} className="text-primary" />
+                )}
               </div>
               <CardTitle className="text-center">{user.name}</CardTitle>
               <CardDescription className="text-center">{user.company}</CardDescription>
@@ -285,6 +301,43 @@ const Dashboard = () => {
                 }}
                 className="space-y-4"
               >
+                <div className="flex flex-col items-center gap-4 mb-4">
+                  <div className="w-24 h-24 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full flex items-center justify-center overflow-hidden">
+                    {editData.avatar ? (
+                      <img src={editData.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                    ) : (
+                      <Icon name="User" size={48} className="text-primary" />
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    <label htmlFor="avatar-upload" className="cursor-pointer">
+                      <input
+                        id="avatar-upload"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleAvatarChange}
+                      />
+                      <Button type="button" size="sm" variant="outline" asChild>
+                        <span>
+                          <Icon name="Upload" size={16} className="mr-2" />
+                          Загрузить фото
+                        </span>
+                      </Button>
+                    </label>
+                    {editData.avatar && (
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setEditData({ ...editData, avatar: '' })}
+                      >
+                        <Icon name="Trash2" size={16} />
+                      </Button>
+                    )}
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <label htmlFor="edit-name" className="text-sm font-medium">
                     ФИО
