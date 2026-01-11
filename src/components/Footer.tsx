@@ -20,7 +20,7 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Контакты</h4>
             <ul className="space-y-2 text-white/80">
-              <li>+7 (846) 123-45-67</li>
+              <li>+7 927 748 68 68</li>
               <li>info@agropartner.ru</li>
               <li>г. Самара</li>
             </ul>

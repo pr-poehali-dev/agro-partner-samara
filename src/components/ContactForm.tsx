@@ -149,8 +149,8 @@ const ContactForm = () => {
                 <p className="text-muted-foreground mb-2">
                   Или позвоните нам напрямую:
                 </p>
-                <a href="tel:+78461234567" className="text-lg font-semibold text-secondary hover:underline">
-                  +7 (846) 123-45-67
+                <a href="tel:+79277486868" className="text-lg font-semibold text-secondary hover:underline">
+                  +7 927 748 68 68
                 </a>
               </div>
             </div>
