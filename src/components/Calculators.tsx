@@ -63,8 +63,8 @@ const Calculators = () => {
           <TabsContent value="grain">
             <Card>
               <CardHeader>
-                <CardTitle>Калькулятор закупки зерна</CardTitle>
-                <CardDescription>Узнайте стоимость продажи вашего урожая</CardDescription>
+                <CardTitle>Закупка зерна с логистикой</CardTitle>
+                <CardDescription>Закупаем зерно любых объёмов с доставкой нашим транспортом</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
@@ -106,16 +106,28 @@ const Calculators = () => {
                 </div>
 
                 <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl p-6 border-2 border-primary/20">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-muted-foreground">Цена за тонну:</span>
-                    <span className="text-xl font-semibold">{grainPrices[grainType].toLocaleString('ru-RU')} ₽</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Итоговая стоимость:</span>
-                    <span className="text-3xl font-bold text-primary">
-                      {calculateGrainPrice().toLocaleString('ru-RU')} ₽
-                    </span>
-                  </div>
+                  <h3 className="font-semibold text-lg mb-3">Наши услуги:</h3>
+                  <ul className="space-y-2 mb-4">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-bold">✓</span>
+                      <span>Закупка зерна по рыночным ценам</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-bold">✓</span>
+                      <span>Услуги профессионального логиста</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-bold">✓</span>
+                      <span>Доставка собственным транспортом</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-bold">✓</span>
+                      <span>Быстрая обработка документов</span>
+                    </li>
+                  </ul>
+                  <p className="text-sm text-muted-foreground">
+                    Оставьте заявку, и мы рассчитаем цену закупки индивидуально
+                  </p>
                 </div>
 
                 <Button className="w-full" size="lg">
