@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import ProfileCard from '@/components/dashboard/ProfileCard';
+import OrdersAndDocuments from '@/components/dashboard/OrdersAndDocuments';
+import EditProfileModal from '@/components/dashboard/EditProfileModal';
 import Icon from '@/components/ui/icon';
+import { Button } from '@/components/ui/button';
 
 const Dashboard = () => {
   const [user, setUser] = useState({
@@ -109,143 +111,22 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center">
-              <Icon name="Wheat" className="text-white" size={28} />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">АгроПартнер</h1>
-              <p className="text-sm text-muted-foreground">Личный кабинет</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setShowNotifications(!showNotifications)}
-                className="relative"
-              >
-                <Icon name="Bell" size={20} />
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-secondary text-white text-xs rounded-full flex items-center justify-center">
-                    {unreadCount}
-                  </span>
-                )}
-              </Button>
-
-              {showNotifications && (
-                <div className="absolute right-0 top-14 w-96 bg-white rounded-xl shadow-2xl border animate-scale-in z-50">
-                  <div className="p-4 border-b">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-semibold">Уведомления</h3>
-                      <button
-                        onClick={() => setShowNotifications(false)}
-                        className="text-muted-foreground hover:text-foreground"
-                      >
-                        <Icon name="X" size={18} />
-                      </button>
-                    </div>
-                  </div>
-                  <div className="max-h-96 overflow-y-auto">
-                    {notifications.map((notification) => (
-                      <div
-                        key={notification.id}
-                        className={`p-4 border-b hover:bg-accent/5 cursor-pointer transition-colors ${
-                          !notification.read ? 'bg-primary/5' : ''
-                        }`}
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                            notification.type === 'order' ? 'bg-secondary/10' :
-                            notification.type === 'document' ? 'bg-accent/10' :
-                            'bg-primary/10'
-                          }`}>
-                            <Icon
-                              name={
-                                notification.type === 'order' ? 'ShoppingCart' :
-                                notification.type === 'document' ? 'FileText' :
-                                'Tag'
-                              }
-                              size={20}
-                              className={
-                                notification.type === 'order' ? 'text-secondary' :
-                                notification.type === 'document' ? 'text-accent' :
-                                'text-primary'
-                              }
-                            />
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-start justify-between gap-2 mb-1">
-                              <h4 className="font-medium text-sm">{notification.title}</h4>
-                              {!notification.read && (
-                                <div className="w-2 h-2 bg-secondary rounded-full flex-shrink-0 mt-1" />
-                              )}
-                            </div>
-                            <p className="text-sm text-muted-foreground mb-1">{notification.message}</p>
-                            <p className="text-xs text-muted-foreground">{notification.time}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="p-3 text-center">
-                    <Button variant="ghost" size="sm" className="w-full">
-                      Показать все уведомления
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-            <Button variant="outline" asChild>
-              <a href="/">На главную</a>
-            </Button>
-            <Button variant="outline">
-              <Icon name="LogOut" size={18} className="mr-2" />
-              Выйти
-            </Button>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader
+        notifications={notifications}
+        showNotifications={showNotifications}
+        setShowNotifications={setShowNotifications}
+        unreadCount={unreadCount}
+      />
 
       <div className="container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-4 gap-6 mb-8">
-          <Card className="md:col-span-1">
-            <CardHeader>
-              <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
-                {user.avatar ? (
-                  <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-                ) : (
-                  <Icon name="User" size={40} className="text-primary" />
-                )}
-              </div>
-              <CardTitle className="text-center">{user.name}</CardTitle>
-              <CardDescription className="text-center">{user.company}</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center gap-2 text-sm">
-                <Icon name="Mail" size={16} className="text-muted-foreground" />
-                <span className="text-muted-foreground">{user.email}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Icon name="Phone" size={16} className="text-muted-foreground" />
-                <span className="text-muted-foreground">{user.phone}</span>
-              </div>
-              <Button
-                className="w-full mt-4"
-                variant="outline"
-                onClick={() => {
-                  setEditData(user);
-                  setShowEditModal(true);
-                }}
-              >
-                <Icon name="Settings" size={16} className="mr-2" />
-                Настройки
-              </Button>
-            </CardContent>
-          </Card>
+          <ProfileCard
+            user={user}
+            onEditClick={() => {
+              setEditData(user);
+              setShowEditModal(true);
+            }}
+          />
 
           <div className="md:col-span-3 space-y-6">
             <div className="grid md:grid-cols-3 gap-4">
@@ -289,81 +170,11 @@ const Dashboard = () => {
               </Card>
             </div>
 
-            <Tabs defaultValue="orders" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="orders">Мои заказы</TabsTrigger>
-                <TabsTrigger value="documents">Документы</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="orders" className="space-y-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>История заказов</CardTitle>
-                    <CardDescription>Все ваши сделки и услуги</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {orders.map((order) => (
-                      <div
-                        key={order.id}
-                        className="flex items-center justify-between p-4 border rounded-xl hover:bg-accent/5 transition-colors"
-                      >
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <span className="font-semibold">{order.id}</span>
-                            <Badge className={getStatusColor(order.status)}>{order.status}</Badge>
-                          </div>
-                          <p className="text-sm text-muted-foreground mb-1">{order.type}</p>
-                          <div className="flex items-center gap-4 text-sm">
-                            <span className="font-medium">{order.product}</span>
-                            <span className="text-muted-foreground">{order.amount}</span>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-lg font-bold text-primary mb-1">{order.price}</p>
-                          <p className="text-xs text-muted-foreground">{order.date}</p>
-                        </div>
-                      </div>
-                    ))}
-                    <Button className="w-full" variant="outline">
-                      <Icon name="Plus" size={18} className="mr-2" />
-                      Создать новый заказ
-                    </Button>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="documents" className="space-y-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Мои документы</CardTitle>
-                    <CardDescription>Договоры, акты и счета</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {documents.map((doc, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between p-4 border rounded-xl hover:bg-accent/5 transition-colors cursor-pointer"
-                      >
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center">
-                            <Icon name="FileText" className="text-secondary" size={24} />
-                          </div>
-                          <div>
-                            <p className="font-medium">{doc.name}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {doc.date} • {doc.size}
-                            </p>
-                          </div>
-                        </div>
-                        <Button size="sm" variant="ghost">
-                          <Icon name="Download" size={18} />
-                        </Button>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+            <OrdersAndDocuments
+              orders={orders}
+              documents={documents}
+              getStatusColor={getStatusColor}
+            />
 
             <Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
               <CardHeader>
@@ -385,146 +196,14 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {showEditModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <Card className="w-full max-w-md shadow-2xl animate-scale-in">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Редактирование профиля</CardTitle>
-                <button
-                  onClick={() => setShowEditModal(false)}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <Icon name="X" size={20} />
-                </button>
-              </div>
-              <CardDescription>Измените свои личные данные</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setUser(editData);
-                  setShowEditModal(false);
-                }}
-                className="space-y-4"
-              >
-                <div className="flex flex-col items-center gap-4 mb-4">
-                  <div className="w-24 h-24 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full flex items-center justify-center overflow-hidden">
-                    {editData.avatar ? (
-                      <img src={editData.avatar} alt="Avatar" className="w-full h-full object-cover" />
-                    ) : (
-                      <Icon name="User" size={48} className="text-primary" />
-                    )}
-                  </div>
-                  <div className="flex gap-2">
-                    <label htmlFor="avatar-upload" className="cursor-pointer">
-                      <input
-                        id="avatar-upload"
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleAvatarChange}
-                      />
-                      <Button type="button" size="sm" variant="outline" asChild>
-                        <span>
-                          <Icon name="Upload" size={16} className="mr-2" />
-                          Загрузить фото
-                        </span>
-                      </Button>
-                    </label>
-                    {editData.avatar && (
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setEditData({ ...editData, avatar: '' })}
-                      >
-                        <Icon name="Trash2" size={16} />
-                      </Button>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="edit-name" className="text-sm font-medium">
-                    ФИО
-                  </label>
-                  <input
-                    id="edit-name"
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Иван Петров"
-                    value={editData.name}
-                    onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="edit-company" className="text-sm font-medium">
-                    Название компании
-                  </label>
-                  <input
-                    id="edit-company"
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder='ООО "Колос"'
-                    value={editData.company}
-                    onChange={(e) => setEditData({ ...editData, company: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="edit-email" className="text-sm font-medium">
-                    Email
-                  </label>
-                  <input
-                    id="edit-email"
-                    type="email"
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="ivan@kolos.ru"
-                    value={editData.email}
-                    onChange={(e) => setEditData({ ...editData, email: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="edit-phone" className="text-sm font-medium">
-                    Телефон
-                  </label>
-                  <input
-                    id="edit-phone"
-                    type="tel"
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="+7 (927) 123-45-67"
-                    value={editData.phone}
-                    onChange={(e) => setEditData({ ...editData, phone: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div className="flex gap-2 pt-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => setShowEditModal(false)}
-                  >
-                    Отмена
-                  </Button>
-                  <Button type="submit" className="flex-1">
-                    <Icon name="CheckCircle" size={18} className="mr-2" />
-                    Сохранить
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+      <EditProfileModal
+        showEditModal={showEditModal}
+        editData={editData}
+        setEditData={setEditData}
+        setShowEditModal={setShowEditModal}
+        handleAvatarChange={handleAvatarChange}
+        onSave={setUser}
+      />
     </div>
   );
 };
