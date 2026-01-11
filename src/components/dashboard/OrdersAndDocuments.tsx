@@ -45,6 +45,28 @@ const OrdersAndDocuments = ({ orders, documents, getStatusColor }: OrdersAndDocu
     doc.type.toLowerCase().includes(documentSearch.toLowerCase())
   );
 
+  const exportToCSV = () => {
+    const headers = ['Номер заказа', 'Тип', 'Продукт', 'Количество', 'Цена', 'Статус', 'Дата'];
+    const csvContent = [
+      headers.join(','),
+      ...filteredOrders.map(order => 
+        [order.id, order.type, order.product, order.amount, order.price, order.status, order.date]
+          .map(field => `"${field}"`)
+          .join(',')
+      )
+    ].join('\n');
+
+    const blob = new Blob([`\uFEFF${csvContent}`], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `заказы_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <Tabs defaultValue="orders" className="w-full">
       <TabsList className="grid w-full grid-cols-2">
@@ -55,8 +77,21 @@ const OrdersAndDocuments = ({ orders, documents, getStatusColor }: OrdersAndDocu
       <TabsContent value="orders" className="space-y-4">
         <Card>
           <CardHeader>
-            <CardTitle>История заказов</CardTitle>
-            <CardDescription>Все ваши сделки и услуги</CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>История заказов</CardTitle>
+                <CardDescription>Все ваши сделки и услуги</CardDescription>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={exportToCSV}
+                disabled={filteredOrders.length === 0}
+              >
+                <Icon name="Download" size={16} className="mr-2" />
+                Экспорт CSV
+              </Button>
+            </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="relative">
