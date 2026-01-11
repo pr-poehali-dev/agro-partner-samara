@@ -6,12 +6,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 
 const Dashboard = () => {
-  const [user] = useState({
+  const [user, setUser] = useState({
     name: 'Иван Петров',
     company: 'ООО "Колос"',
     email: 'ivan@kolos.ru',
     phone: '+7 (927) 123-45-67'
   });
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editData, setEditData] = useState(user);
 
   const orders = [
     {
@@ -107,7 +109,14 @@ const Dashboard = () => {
                 <Icon name="Phone" size={16} className="text-muted-foreground" />
                 <span className="text-muted-foreground">{user.phone}</span>
               </div>
-              <Button className="w-full mt-4" variant="outline">
+              <Button
+                className="w-full mt-4"
+                variant="outline"
+                onClick={() => {
+                  setEditData(user);
+                  setShowEditModal(true);
+                }}
+              >
                 <Icon name="Settings" size={16} className="mr-2" />
                 Настройки
               </Button>
@@ -251,6 +260,110 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-md shadow-2xl animate-scale-in">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Редактирование профиля</CardTitle>
+                <button
+                  onClick={() => setShowEditModal(false)}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <Icon name="X" size={20} />
+                </button>
+              </div>
+              <CardDescription>Измените свои личные данные</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setUser(editData);
+                  setShowEditModal(false);
+                }}
+                className="space-y-4"
+              >
+                <div className="space-y-2">
+                  <label htmlFor="edit-name" className="text-sm font-medium">
+                    ФИО
+                  </label>
+                  <input
+                    id="edit-name"
+                    type="text"
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Иван Петров"
+                    value={editData.name}
+                    onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="edit-company" className="text-sm font-medium">
+                    Название компании
+                  </label>
+                  <input
+                    id="edit-company"
+                    type="text"
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder='ООО "Колос"'
+                    value={editData.company}
+                    onChange={(e) => setEditData({ ...editData, company: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="edit-email" className="text-sm font-medium">
+                    Email
+                  </label>
+                  <input
+                    id="edit-email"
+                    type="email"
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="ivan@kolos.ru"
+                    value={editData.email}
+                    onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="edit-phone" className="text-sm font-medium">
+                    Телефон
+                  </label>
+                  <input
+                    id="edit-phone"
+                    type="tel"
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="+7 (927) 123-45-67"
+                    value={editData.phone}
+                    onChange={(e) => setEditData({ ...editData, phone: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="flex gap-2 pt-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => setShowEditModal(false)}
+                  >
+                    Отмена
+                  </Button>
+                  <Button type="submit" className="flex-1">
+                    <Icon name="CheckCircle" size={18} className="mr-2" />
+                    Сохранить
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
