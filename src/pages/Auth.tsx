@@ -18,6 +18,11 @@ const Auth = () => {
     password: '',
     confirmPassword: ''
   });
+  const [resetStep, setResetStep] = useState<'email' | 'code' | 'password'>('email');
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetCode, setResetCode] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [showResetModal, setShowResetModal] = useState(false);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +32,25 @@ const Auth = () => {
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     navigate('/dashboard');
+  };
+
+  const handleSendResetCode = (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetStep('code');
+  };
+
+  const handleVerifyCode = (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetStep('password');
+  };
+
+  const handleResetPassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    setShowResetModal(false);
+    setResetStep('email');
+    setResetEmail('');
+    setResetCode('');
+    setNewPassword('');
   };
 
   return (
@@ -133,9 +157,13 @@ const Auth = () => {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label htmlFor="login-password">Пароль</Label>
-                      <a href="#" className="text-sm text-primary hover:underline">
+                      <button
+                        type="button"
+                        onClick={() => setShowResetModal(true)}
+                        className="text-sm text-primary hover:underline"
+                      >
                         Забыли пароль?
-                      </a>
+                      </button>
                     </div>
                     <Input
                       id="login-password"
@@ -259,6 +287,112 @@ const Auth = () => {
           </CardContent>
         </Card>
       </div>
+
+      {showResetModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-md shadow-2xl animate-scale-in">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Восстановление пароля</CardTitle>
+                <button
+                  onClick={() => {
+                    setShowResetModal(false);
+                    setResetStep('email');
+                  }}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <Icon name="X" size={20} />
+                </button>
+              </div>
+              <CardDescription>
+                {resetStep === 'email' && 'Введите email для получения кода восстановления'}
+                {resetStep === 'code' && 'Введите код из письма'}
+                {resetStep === 'password' && 'Создайте новый пароль'}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {resetStep === 'email' && (
+                <form onSubmit={handleSendResetCode} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="reset-email">Email</Label>
+                    <Input
+                      id="reset-email"
+                      type="email"
+                      placeholder="ivan@kolos.ru"
+                      value={resetEmail}
+                      onChange={(e) => setResetEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <Button type="submit" className="w-full">
+                    <Icon name="Mail" size={18} className="mr-2" />
+                    Отправить код
+                  </Button>
+                </form>
+              )}
+
+              {resetStep === 'code' && (
+                <form onSubmit={handleVerifyCode} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="reset-code">Код из письма</Label>
+                    <Input
+                      id="reset-code"
+                      type="text"
+                      placeholder="123456"
+                      value={resetCode}
+                      onChange={(e) => setResetCode(e.target.value)}
+                      required
+                      maxLength={6}
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="flex-1"
+                      onClick={() => setResetStep('email')}
+                    >
+                      Назад
+                    </Button>
+                    <Button type="submit" className="flex-1">
+                      Проверить код
+                    </Button>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="link"
+                    className="w-full text-sm"
+                    onClick={handleSendResetCode}
+                  >
+                    Отправить код повторно
+                  </Button>
+                </form>
+              )}
+
+              {resetStep === 'password' && (
+                <form onSubmit={handleResetPassword} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="new-password">Новый пароль</Label>
+                    <Input
+                      id="new-password"
+                      type="password"
+                      placeholder="••••••••"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                      minLength={6}
+                    />
+                  </div>
+                  <Button type="submit" className="w-full">
+                    <Icon name="CheckCircle" size={18} className="mr-2" />
+                    Сохранить новый пароль
+                  </Button>
+                </form>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
