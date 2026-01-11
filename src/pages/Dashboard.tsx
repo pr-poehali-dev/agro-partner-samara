@@ -15,6 +15,36 @@ const Dashboard = () => {
   });
   const [showEditModal, setShowEditModal] = useState(false);
   const [editData, setEditData] = useState(user);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const notifications = [
+    {
+      id: 1,
+      title: 'Новый заказ обработан',
+      message: 'Заказ №2024-002 находится в обработке',
+      time: '2 часа назад',
+      read: false,
+      type: 'order'
+    },
+    {
+      id: 2,
+      title: 'Документ готов',
+      message: 'Счет-фактура №456 доступен для скачивания',
+      time: '5 часов назад',
+      read: false,
+      type: 'document'
+    },
+    {
+      id: 3,
+      title: 'Специальное предложение',
+      message: 'Скидка 10% на бухгалтерские услуги',
+      time: 'вчера',
+      read: true,
+      type: 'promo'
+    }
+  ];
+
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -91,6 +121,84 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <div className="relative">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative"
+              >
+                <Icon name="Bell" size={20} />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-secondary text-white text-xs rounded-full flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </Button>
+
+              {showNotifications && (
+                <div className="absolute right-0 top-14 w-96 bg-white rounded-xl shadow-2xl border animate-scale-in z-50">
+                  <div className="p-4 border-b">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold">Уведомления</h3>
+                      <button
+                        onClick={() => setShowNotifications(false)}
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        <Icon name="X" size={18} />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="max-h-96 overflow-y-auto">
+                    {notifications.map((notification) => (
+                      <div
+                        key={notification.id}
+                        className={`p-4 border-b hover:bg-accent/5 cursor-pointer transition-colors ${
+                          !notification.read ? 'bg-primary/5' : ''
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                            notification.type === 'order' ? 'bg-secondary/10' :
+                            notification.type === 'document' ? 'bg-accent/10' :
+                            'bg-primary/10'
+                          }`}>
+                            <Icon
+                              name={
+                                notification.type === 'order' ? 'ShoppingCart' :
+                                notification.type === 'document' ? 'FileText' :
+                                'Tag'
+                              }
+                              size={20}
+                              className={
+                                notification.type === 'order' ? 'text-secondary' :
+                                notification.type === 'document' ? 'text-accent' :
+                                'text-primary'
+                              }
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-start justify-between gap-2 mb-1">
+                              <h4 className="font-medium text-sm">{notification.title}</h4>
+                              {!notification.read && (
+                                <div className="w-2 h-2 bg-secondary rounded-full flex-shrink-0 mt-1" />
+                              )}
+                            </div>
+                            <p className="text-sm text-muted-foreground mb-1">{notification.message}</p>
+                            <p className="text-xs text-muted-foreground">{notification.time}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="p-3 text-center">
+                    <Button variant="ghost" size="sm" className="w-full">
+                      Показать все уведомления
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
             <Button variant="outline" asChild>
               <a href="/">На главную</a>
             </Button>
