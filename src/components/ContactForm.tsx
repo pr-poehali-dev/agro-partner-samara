@@ -162,7 +162,7 @@ const ContactForm = () => {
               <div>
                 <h3 className="font-semibold text-lg mb-2">Наш офис</h3>
                 <p className="text-muted-foreground">
-                  г. Самара, ул. Промышленная, 15<br />
+                  г. Самара, ул. Красноармейская, д. 72<br />
                   Пн-Пт: 9:00 - 18:00
                 </p>
               </div>
