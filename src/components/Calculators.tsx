@@ -14,9 +14,9 @@ const Calculators = () => {
   const [accountingPackage, setAccountingPackage] = useState('basic');
 
   const grainPrices: Record<string, number> = {
-    wheat: 15000,
-    barley: 12000,
-    sunflower: 28000
+    wheat: 18500,  // Пшеница 3 класса - 18 500 ₽/тонна
+    barley: 14800,  // Ячмень фуражный - 14 800 ₽/тонна
+    sunflower: 32000  // Подсолнечник масличный - 32 000 ₽/тонна
   };
 
   const fuelPrices: Record<string, number> = {
