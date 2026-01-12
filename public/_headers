@@ -1,0 +1,52 @@
+# Заголовки безопасности для всех страниц
+/*
+  # Защита от XSS атак
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  X-XSS-Protection: 1; mode=block
+  
+  # Referrer Policy
+  Referrer-Policy: strict-origin-when-cross-origin
+  
+  # Content Security Policy
+  Content-Security-Policy: default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.poehali.dev https://mc.yandex.ru; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://mc.yandex.ru https://cdn.poehali.dev; frame-src 'self'; object-src 'none'; base-uri 'self';
+  
+  # Permissions Policy
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()
+  
+  # HSTS (HTTP Strict Transport Security)
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  
+  # Кеширование
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# Кеширование статических файлов
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
