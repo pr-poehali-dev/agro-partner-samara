@@ -1,14 +1,29 @@
+# Правила для всех поисковых роботов
+User-agent: *
+Allow: /
+
+# Яндекс (основной поисковик в России)
+User-agent: Yandex
+Allow: /
+Crawl-delay: 1
+
+# Google
 User-agent: Googlebot
 Allow: /
 
+# Bing
 User-agent: Bingbot
 Allow: /
 
+# Социальные сети
 User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
-Allow: /
+# Карта сайта
+Sitemap: https://agro-partner-samara.poehali.site/sitemap.xml
+
+# Основной домен для Яндекса
+Host: agro-partner-samara.poehali.site
