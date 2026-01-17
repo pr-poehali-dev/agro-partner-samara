@@ -130,7 +130,14 @@ const Calculators = () => {
                   </p>
                 </div>
 
-                <Button className="w-full" size="lg">
+                <Button 
+                  className="w-full" 
+                  size="lg"
+                  onClick={() => {
+                    const contactSection = document.getElementById('contact');
+                    contactSection?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
                   Оставить заявку на продажу
                 </Button>
               </CardContent>
@@ -188,7 +195,15 @@ const Calculators = () => {
                   </div>
                 </div>
 
-                <Button className="w-full" size="lg" variant="secondary">
+                <Button 
+                  className="w-full" 
+                  size="lg" 
+                  variant="secondary"
+                  onClick={() => {
+                    const contactSection = document.getElementById('contact');
+                    contactSection?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
                   Заказать топливо
                 </Button>
               </CardContent>
@@ -266,7 +281,14 @@ const Calculators = () => {
                   </div>
                 </div>
 
-                <Button className="w-full" size="lg">
+                <Button 
+                  className="w-full" 
+                  size="lg"
+                  onClick={() => {
+                    const contactSection = document.getElementById('contact');
+                    contactSection?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
                   Подключить бухгалтерию
                 </Button>
               </CardContent>
